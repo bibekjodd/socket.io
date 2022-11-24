@@ -1,12 +1,14 @@
 const express = require('express');
 const app = express();
-require('dotenv').config({ path: './.env' })
-const port = process.env.PORT || 3000
-require('colors')
+require('dotenv').config({ path: './.env' });
+const port = process.env.PORT || 3000;
+require('colors');
 const http = require('http');
 const { Server } = require('socket.io');
-const cors = require('cors')
+const cors = require('cors');
 app.use(cors());
+const connectDB = require('./config/connectDatabase');
+connectDB();
 
 
 const server = http.createServer(app);
