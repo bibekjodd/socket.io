@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+app.use(express.json());
 require('dotenv').config({ path: './.env' });
 const port = process.env.PORT || 3000;
 require('colors');
@@ -9,7 +10,11 @@ const cors = require('cors');
 app.use(cors());
 const connectDB = require('./config/connectDatabase');
 connectDB();
+const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
+app.use('/api/user', require('./routes/userRoutes'));
+app.use(notFound)
+app.use(errorHandler);
 
 const server = http.createServer(app);
 const io = new Server(server, {

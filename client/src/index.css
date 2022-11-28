@@ -2,8 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components{
 
-body {
-    background: url('./components/bg.png');
-    background-size: 100%;
+.home{
+    @apply bg-gradient-to-br from-sky-500 via-pink-400 to-cyan-600
+
 }
+
+.form-input {
+    @apply text-white placeholder:text-white outline-none bg-black/5 rounded-md  py-2 pl-2 w-full ring-1 ring-white/5 focus:ring-white/30 transition-all duration-200
+}
+
+.show-hide {
+    @apply absolute right-2 top-1/2 -translate-y-1/2  px-2 text-white py-0.5 bg-black/5 rounded-md cursor-pointer select-none 
+}
+
+.submit-button{
+    @apply bg-sky-500 disabled:bg-white/30  h-10 text-lg  text-white  rounded-md font-semibold flex items-center justify-center space-x-2
+}
+
+}
+body {
+    min-height: 100vh;
+}
+

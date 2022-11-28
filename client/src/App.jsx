@@ -1,13 +1,11 @@
 import React from 'react'
 import { Routes, Route } from 'react-router-dom'
-import bg from './components/bg.png'
 import ChatPage from './pages/ChatPage'
 import Homepage from './pages/Homepage'
 
 function App() {
     return (
-        <div className=''>
-           
+        <div className=' w-full h-screen '>
             <Routes>
                 <Route path='/' element={<Homepage />} />
                 <Route path='/chats' element={<ChatPage />} />

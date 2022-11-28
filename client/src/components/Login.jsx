@@ -1,33 +1,84 @@
 import React from 'react'
 import { useState } from 'react'
+import axios from 'axios'
+import { AiOutlineLoading3Quarters } from 'react-icons/ai'
+import { useNavigate } from 'react-router-dom'
 
-function Login() {
+function Login({ setError }) {
+    const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
+
+
+    const handleSubmit = async (e) => {
+        console.log("login called")
+        e.preventDefault();
+        if (loading)
+            return;
+        setLoading(true);
+
+        try {
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+
+            const { data } = await axios.post('http://localhost:5000/api/user/login', { email, password }, config)
+            localStorage.setItem('userInfo', JSON.stringify(data));
+            setLoading(false);
+            navigate('/chats')
+        } catch (error) {
+            console.log(error)
+            setLoading(false);
+            setError(error.response.data.message)
+        }
+    }
+
+
+
+
+
+
     return (
-        <form className='flex flex-col space-y-3'>
-            <input type="text" name="" id=""
-                value={email}
-                onChange={(e) => { setEmail(e.target.value) }}
-                placeholder='Enter Your Email Address'
-                className='border-2 border-gray-100 focus:border-gray-200 rounded-md outline-none py-1 pl-2'
-            />
-            <div className='relative'>
-                <input type={showPassword ? 'text' : 'password'} name="" id=""
-                    placeholder='Enter Password'
-                    value={password}
-                    onChange={(e) => { setPassword(e.target.value) }}
-                    className='border-2 border-gray-100 focus:border-gray-200 rounded-md outline-none py-1 pl-2 w-full'
+        <div>
+
+            <form
+                onSubmit={handleSubmit}
+                className='flex flex-col space-y-5'>
+                <input type="text" name="email" id="email"
+                    value={email}
+                    onChange={(e) => { setEmail(e.target.value) }}
+                    placeholder='Enter Your Email Address'
+                    className='form-input'
                 />
-                <span
-                    onClick={() => { setShowPassword(!showPassword) }}
-                    className='absolute right-2 top-1/2 -translate-y-1/2 bg-gray-100 px-2 text-gray-700 cursor-pointer select-none'>
-                    {showPassword ? 'Hide' : 'Show'}
-                </span>
-            </div>
-            <button className='bg-sky-500 text-white py-1 rounded-md font-semibold'>Login</button>
-        </form>
+                <div className='relative'>
+                    <input type={showPassword ? 'text' : 'password'} name="password" id="password"
+                        placeholder='Enter Password'
+                        value={password}
+                        onChange={(e) => { setPassword(e.target.value) }}
+                        className='form-input'
+                    />
+                    <span
+                        onClick={() => { setShowPassword(!showPassword) }}
+                        className='show-hide'>
+                        {showPassword ? 'Hide' : 'Show'}
+                    </span>
+                </div>
+                <button
+                    disabled={loading}
+                    className={`submit-button ${loading ? 'text-sky-500' : ''} `}>
+                    {loading && <AiOutlineLoading3Quarters className={`animate-spin`} />}
+                    <span >
+                        Login
+                    </span>
+                </button>
+
+            </form>
+        </div>
+
     )
 }
 
